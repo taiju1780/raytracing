@@ -1,0 +1,11 @@
+﻿  Geometry.cpp
+c:\users\owner\desktop\tracingofray\tracingofray\tracingofray\geometry.cpp(8): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+c:\users\owner\desktop\tracingofray\tracingofray\tracingofray\geometry.cpp(13): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+  main.cpp
+c:\users\owner\desktop\tracingofray\tracingofray\tracingofray\main.cpp(33): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+c:\users\owner\desktop\tracingofray\tracingofray\tracingofray\main.cpp(39): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+c:\users\owner\desktop\tracingofray\tracingofray\tracingofray\main.cpp(160): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+c:\users\owner\desktop\tracingofray\tracingofray\tracingofray\main.cpp(205): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+c:\users\owner\desktop\tracingofray\tracingofray\tracingofray\main.cpp(216): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+  コードを生成中...
+  TracingOfRay.vcxproj -> C:\Users\Owner\Desktop\TracingOfRay\TracingOfRay\x64\Debug\TracingOfRay.exe
