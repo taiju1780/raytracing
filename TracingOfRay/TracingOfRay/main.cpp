@@ -203,6 +203,7 @@ void TraceOn() {
 						//‰e•`‰æ
 						if (HitFloorShadow(point, i)) {
 							DrawPixel(x, y, GetColor(0 * 0.5f, 0 * 0.5f, 0 * 0.5f));
+							break;
 						}
 						else {
 							DrawPixel(x, y, GetColor(0, 0, 0));
@@ -214,6 +215,7 @@ void TraceOn() {
 						//‰e•`‰æ
 						if (HitFloorShadow(point, i)) {
 							DrawPixel(x, y, GetColor(255 * 0.5f, 255 * 0.5f, 255 * 0.5f));
+							break;
 						}
 						else {
 							DrawPixel(x, y, GetColor(255, 255, 255));
@@ -252,6 +254,7 @@ void TraceOn() {
 					}
 					//ƒŒƒC‚ð•`‰æ
 					DrawPixelWithFloat(x, y, CaliculateColor(albedo, bright, specular, 0));
+					break;
 				}
 			}
 		}
