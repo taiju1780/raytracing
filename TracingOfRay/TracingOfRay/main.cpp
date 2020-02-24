@@ -283,14 +283,13 @@ void TraceOn() {
 					////////////////////////////////////////////////////////////////////////
 
 					auto ref = ReflectVector(ray, normal);
-
 					auto b = 0.0f;
 
 					auto ballray = sp[(i + 1) % sp.size()].pos - sp[i].pos;
 
 					//その他オブジェクト反射
 					if (HitObjeectRay(point, (i + 1) % sp.size(), ref, b)) {
-						
+
 						if (Dot(ref, ballray) >= 0) {
 							auto c = sp[(i + 1) % sp.size()].albedo;
 							albedo = sp[i].albedo * c;
