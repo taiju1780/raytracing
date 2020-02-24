@@ -15,12 +15,12 @@ Plane plane;
 void Init(){
 	//ボールの初期化
 	float r = 100;
-	Position3 pos = Position3(0, 20, 0);
-	Vector3 albedo = { 1.0f,0.0f,0.0f };
+	Position3 pos = Position3(-120, 50, 0);
+	Vector3 albedo = { 0.5f,0.8f,0.8f };
 	sp.push_back(Sphere(r, pos, albedo));
 
 	pos = Position3(120, 50, 0); 
-	albedo = { 0.0f,1.0f,0.0f };
+	albedo = { 0.8f,0.5f,0.8f };
 	sp.push_back(Sphere(r, pos, albedo));
 
 	//床の初期化
@@ -46,6 +46,10 @@ Vector3 Clamp(const Vector3& value, const float minvalue = 0.0f, const float max
 		max(min(value.y, maxvalue), minvalue),
 		max(min(value.z, maxvalue), minvalue)
 	);
+}
+
+float Clamp(const float& value, const float minvalue = 0.0f, const float maxvalue = 1.0f) {
+	return float(max(min(value, maxvalue), minvalue));
 }
 
 //色の合成
@@ -78,7 +82,7 @@ bool HitRay(Vector3 eye, int ballnum, Vector3 ray, float &bright, Vector3 &n, Ve
 	n.Normalize();
 
 	//光
-	Vector3 light(1, -1, 1);
+	Vector3 light(1, -2, 2);
 
 	light.Normalize();
 
@@ -90,6 +94,46 @@ bool HitRay(Vector3 eye, int ballnum, Vector3 ray, float &bright, Vector3 &n, Ve
 
 	//スペキュラー
 	spe = pow(max(min(Dot(lightray, -ray), 1), 0), 20);
+
+	//クランプ
+	bright = max(min(bright, 1), 0);
+
+	//垂線が半径以内に収まってたらtrue
+	if (sp[ballnum].radius >= raycirclemag) {
+		return true;
+	}
+	return false;
+}
+
+//その他オブジェクトとの当たり判定
+bool HitObjeectRay(Vector3 eye, int ballnum, Vector3 ray, float &bright) {
+	//中心までのray
+	Vector3 center = sp[ballnum].pos - eye;
+
+	//接線
+	Vector3 circleray = ray * Dot(center, ray);
+
+	//垂線
+	auto raycirclemag = (center - circleray).Magnitude();
+
+	//垂線を下したところから接点までの距離
+	auto w = sqrt(sp[ballnum].radius * sp[ballnum].radius - raycirclemag * raycirclemag);
+
+	//接点
+	auto p = eye + ray * (Dot(center, ray) - w);
+
+	//法線
+	auto n = sp[ballnum].pos - p;
+
+	n.Normalize();
+
+	//光
+	Vector3 light(1, -2, 2);
+
+	light.Normalize();
+
+	//輝き
+	bright = Dot(light, n);
 
 	//クランプ
 	bright = max(min(bright, 1), 0);
@@ -132,7 +176,7 @@ bool HitFloorRay(Vector3 ray, Plane plane, Vector3& point) {
 bool HitFloorShadow(Vector3 point, int ballnum) {
 
 	//光
-	Vector3 light(1, -1, 1);
+	Vector3 light(1, -2, 2);
 
 	light.Normalize();
 
@@ -151,7 +195,9 @@ bool HitFloorShadow(Vector3 point, int ballnum) {
 	}
 }
 
+////////////////////////////////////////////////////////////////////////
 //描画
+////////////////////////////////////////////////////////////////////////
 void TraceOn() {
 	for (int y = 0; y < screensizey; y++) {
 		for (int x = 0; x < screensizex; x++) {
@@ -178,7 +224,7 @@ void TraceOn() {
 			Vector3 point = Vector3();
 
 			//色
-			Vector3 albedo = { 1.0f,0.0f,0.0f };
+			Vector3 albedo = Vector3();
 
 			//法線
 			Vector3 normal = Vector3();
@@ -187,9 +233,9 @@ void TraceOn() {
 			Vector3 hitballpos = Vector3();
 
 			//背景
-			/*if (ray.y >= 0) {
+			if (ray.y >= 0) {
 				DrawPixel(x, y, GetColor(0, 225, 255));
-			}*/
+			}
 
 			////////////////////////////////////////////////////////////////////////
 			//床の描画
@@ -202,11 +248,11 @@ void TraceOn() {
 					for (int i = 0; i < sp.size(); ++i) {
 						//影描画
 						if (HitFloorShadow(point, i)) {
-							DrawPixel(x, y, GetColor(0 * 0.5f, 0 * 0.5f, 0 * 0.5f));
+							DrawPixel(x, y, GetColor(128 * 0.5f, 128 * 0.5f, 128 * 0.5f));
 							break;
 						}
 						else {
-							DrawPixel(x, y, GetColor(0, 0, 0));
+							DrawPixel(x, y, GetColor(128, 128, 128));
 						}
 					}
 				}
@@ -214,11 +260,11 @@ void TraceOn() {
 					for (int i = 0; i < sp.size(); ++i) {
 						//影描画
 						if (HitFloorShadow(point, i)) {
-							DrawPixel(x, y, GetColor(255 * 0.5f, 255 * 0.5f, 255 * 0.5f));
+							DrawPixel(x, y, GetColor(25 * 0.5f, 25 * 0.5f, 128 * 0.5f));
 							break;
 						}
 						else {
-							DrawPixel(x, y, GetColor(255, 255, 255));
+							DrawPixel(x, y, GetColor(25, 25, 128));
 						}
 					}
 				}
@@ -238,22 +284,41 @@ void TraceOn() {
 
 					auto ref = ReflectVector(ray, normal);
 
+					auto b = 0.0f;
+
+					auto ballray = sp[(i + 1) % sp.size()].pos - sp[i].pos;
+
+					//その他オブジェクト反射
+					if (HitObjeectRay(point, (i + 1) % sp.size(), ref, b)) {
+						
+						if (Dot(ref, ballray) >= 0) {
+							auto c = sp[(i + 1) % sp.size()].albedo;
+							albedo = sp[i].albedo * c;
+							bright = b;
+						}
+					}
+
+					//床反射
 					if (HitFloorRay(ref, plane, point)) {
 
 						//レイを描画
 						if (sin(point.x / 50) * cos(point.z / 50) >= 0) {
 							//反射している色を乗算
-							auto c = Vector3(0, 0, 0);
-							albedo = albedo * c;
+							auto c = Vector3(0.5, 0.5, 0.5);
+							albedo = sp[i].albedo * c;
 						}
 						else {
 							//反射している色を乗算
-							auto c = Vector3(1, 1, 1);
-							albedo = albedo * c;
+							auto c = Vector3(0.1, 0.1, 0.5);
+							albedo = sp[i].albedo * c;
 						}
 					}
+					else {
+						albedo = sp[i].albedo;
+					}
+
 					//レイを描画
-					DrawPixelWithFloat(x, y, CaliculateColor(albedo, bright, specular, 0));
+					DrawPixelWithFloat(x, y, CaliculateColor(albedo, Clamp(bright), specular, 0));
 					break;
 				}
 			}

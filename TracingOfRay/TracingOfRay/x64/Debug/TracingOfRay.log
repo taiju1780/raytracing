@@ -1,7 +1,9 @@
 ﻿  main.cpp
 c:\users\owner\desktop\raytracing\tracingofray\tracingofray\main.cpp(33): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
 c:\users\owner\desktop\raytracing\tracingofray\tracingofray\main.cpp(39): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
-c:\users\owner\desktop\raytracing\tracingofray\tracingofray\main.cpp(160): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
-c:\users\owner\desktop\raytracing\tracingofray\tracingofray\main.cpp(205): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-c:\users\owner\desktop\raytracing\tracingofray\tracingofray\main.cpp(217): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+c:\users\owner\desktop\raytracing\tracingofray\tracingofray\main.cpp(206): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+c:\users\owner\desktop\raytracing\tracingofray\tracingofray\main.cpp(251): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+c:\users\owner\desktop\raytracing\tracingofray\tracingofray\main.cpp(263): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+c:\users\owner\desktop\raytracing\tracingofray\tracingofray\main.cpp(312): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
+c:\users\owner\desktop\raytracing\tracingofray\tracingofray\main.cpp(316): warning C4804: '>=': 演算中の 'bool' 型の使用方法が安全ではありません
   TracingOfRay.vcxproj -> C:\Users\Owner\Desktop\raytracing\TracingOfRay\x64\Debug\TracingOfRay.exe
