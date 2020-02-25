@@ -287,16 +287,6 @@ void TraceOn() {
 
 					auto ballray = sp[(i + 1) % sp.size()].pos - sp[i].pos;
 
-					//その他オブジェクト反射
-					if (HitObjeectRay(point, (i + 1) % sp.size(), ref, b)) {
-
-						if (Dot(ref, ballray) >= 0) {
-							auto c = sp[(i + 1) % sp.size()].albedo;
-							albedo = sp[i].albedo * c;
-							bright = b;
-						}
-					}
-
 					//床反射
 					if (HitFloorRay(ref, plane, point)) {
 
@@ -314,6 +304,16 @@ void TraceOn() {
 					}
 					else {
 						albedo = sp[i].albedo;
+					}
+
+					//その他オブジェクト反射
+					if (HitObjeectRay(point, (i + 1) % sp.size(), ref, b)) {
+
+						if (Dot(ref, ballray) >= 0) {
+							auto c = sp[(i + 1) % sp.size()].albedo;
+							albedo = sp[i].albedo * c;
+							bright = b;
+						}
 					}
 
 					//レイを描画
